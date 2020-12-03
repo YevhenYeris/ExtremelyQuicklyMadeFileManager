@@ -4,7 +4,8 @@ using System.Text;
 
 namespace ExtremelyQuicklyMadeFileManager
 {
-    public class HtmlLoader : Loader
+    interface IPanelObserver
     {
+        public void Update();
     }
 }

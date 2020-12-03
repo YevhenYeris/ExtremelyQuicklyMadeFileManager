@@ -47,7 +47,7 @@ namespace ExtremelyQuicklyMadeFileManager
             if (_dateCheck.Checked)
             {
                 files = from f in files
-                        where (new DirectoryInfo(f)).CreationTime == _time.Value
+                        where (new DirectoryInfo(f)).CreationTime.Date == _time.Value.Date
                         select f;
             }
 

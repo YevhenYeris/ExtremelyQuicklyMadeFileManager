@@ -48,11 +48,11 @@
             this.rightExtCombo = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.searchTypeComboBox = new System.Windows.Forms.ComboBox();
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
-            this.resetButton = new System.Windows.Forms.Button();
+            this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.timeCheck = new System.Windows.Forms.CheckBox();
+            this.resetButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.leftTextBox = new System.Windows.Forms.TextBox();
             this.leftButton = new System.Windows.Forms.Button();
@@ -111,7 +111,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 66F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1200, 776);
             this.tableLayoutPanel1.TabIndex = 1;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // splitContainer1
             // 
@@ -141,16 +140,16 @@
             this.rightTree.SelectedImageIndex = 0;
             this.rightTree.Size = new System.Drawing.Size(195, 529);
             this.rightTree.TabIndex = 0;
-            this.rightTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.rightTree_AfterSelect);
-            this.rightTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rightTree_NodeMouseClick);
-            this.rightTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rightTree_NodeMouseDoubleClick);
+            this.rightTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Tree_NodeMouseClick);
+            this.rightTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Tree_NodeMouseDoubleClick);
+            this.rightTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Tree_KeyDown);
             // 
             // dirIconList
             // 
             this.dirIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.dirIconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("dirIconList.ImageStream")));
             this.dirIconList.TransparentColor = System.Drawing.Color.Transparent;
-            this.dirIconList.Images.SetKeyName(0, "000013.JPG");
+            this.dirIconList.Images.SetKeyName(0, "folder.png");
             // 
             // rightListView
             // 
@@ -163,15 +162,14 @@
             this.rightListView.SmallImageList = this.fileIconList;
             this.rightListView.TabIndex = 0;
             this.rightListView.UseCompatibleStateImageBehavior = false;
-            this.rightListView.SelectedIndexChanged += new System.EventHandler(this.rightListView_SelectedIndexChanged);
-            this.rightListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.rightListView_MouseDoubleClick);
+            this.rightListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListView_KeyDown);
             // 
             // fileIconList
             // 
             this.fileIconList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.fileIconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("fileIconList.ImageStream")));
             this.fileIconList.TransparentColor = System.Drawing.Color.Transparent;
-            this.fileIconList.Images.SetKeyName(0, "000013.JPG");
+            this.fileIconList.Images.SetKeyName(0, "file-empty.png");
             // 
             // splitContainer2
             // 
@@ -202,8 +200,9 @@
             this.leftTree.Size = new System.Drawing.Size(195, 529);
             this.leftTree.StateImageList = this.dirIconList;
             this.leftTree.TabIndex = 0;
-            this.leftTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.leftTree_NodeMouseClick);
-            this.leftTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.leftTree_NodeMouseDoubleClick);
+            this.leftTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Tree_NodeMouseClick);
+            this.leftTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.Tree_NodeMouseDoubleClick);
+            this.leftTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Tree_KeyDown);
             // 
             // leftListView
             // 
@@ -216,11 +215,7 @@
             this.leftListView.SmallImageList = this.fileIconList;
             this.leftListView.TabIndex = 0;
             this.leftListView.UseCompatibleStateImageBehavior = false;
-            this.leftListView.ItemActivate += new System.EventHandler(this.leftListView_ItemActivate);
-            this.leftListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.leftListView_ItemSelectionChanged);
-            this.leftListView.SelectedIndexChanged += new System.EventHandler(this.leftListView_SelectedIndexChanged);
-            this.leftListView.DoubleClick += new System.EventHandler(this.leftListView_DoubleClick);
-            this.leftListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.leftListView_MouseDoubleClick);
+            this.leftListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ListView_KeyDown);
             // 
             // tableLayoutPanel2
             // 
@@ -245,7 +240,7 @@
             this.leftDirCombo.Name = "leftDirCombo";
             this.leftDirCombo.Size = new System.Drawing.Size(151, 28);
             this.leftDirCombo.TabIndex = 0;
-            this.leftDirCombo.SelectedIndexChanged += new System.EventHandler(this.leftDirCombo_SelectedIndexChanged);
+            this.leftDirCombo.SelectedIndexChanged += new System.EventHandler(this.DirCombo_SelectedIndexChanged);
             // 
             // leftExtCombo
             // 
@@ -278,7 +273,7 @@
             this.rightDirCombo.Name = "rightDirCombo";
             this.rightDirCombo.Size = new System.Drawing.Size(151, 28);
             this.rightDirCombo.TabIndex = 0;
-            this.rightDirCombo.SelectedIndexChanged += new System.EventHandler(this.rightDirCombo_SelectedIndexChanged);
+            this.rightDirCombo.SelectedIndexChanged += new System.EventHandler(this.DirCombo_SelectedIndexChanged);
             // 
             // rightExtCombo
             // 
@@ -291,8 +286,8 @@
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.65657F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 84.34344F));
             this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel5, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 3);
@@ -304,65 +299,71 @@
             // 
             // tableLayoutPanel5
             // 
-            this.tableLayoutPanel5.ColumnCount = 2;
+            this.tableLayoutPanel5.ColumnCount = 3;
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 22F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.Controls.Add(this.dateTimePicker, 1, 2);
-            this.tableLayoutPanel5.Controls.Add(this.searchTypeComboBox, 1, 0);
-            this.tableLayoutPanel5.Controls.Add(this.fileNameTextBox, 1, 1);
-            this.tableLayoutPanel5.Controls.Add(this.resetButton, 1, 3);
-            this.tableLayoutPanel5.Controls.Add(this.timeCheck, 0, 2);
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 223F));
+            this.tableLayoutPanel5.Controls.Add(this.searchTypeComboBox, 2, 0);
+            this.tableLayoutPanel5.Controls.Add(this.fileNameTextBox, 2, 1);
+            this.tableLayoutPanel5.Controls.Add(this.dateTimePicker, 1, 0);
+            this.tableLayoutPanel5.Controls.Add(this.timeCheck, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.resetButton, 1, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(300, 3);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(96, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 4;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(291, 123);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(495, 123);
             this.tableLayoutPanel5.TabIndex = 1;
-            // 
-            // dateTimePicker
-            // 
-            this.dateTimePicker.Location = new System.Drawing.Point(25, 71);
-            this.dateTimePicker.Name = "dateTimePicker";
-            this.dateTimePicker.Size = new System.Drawing.Size(250, 27);
-            this.dateTimePicker.TabIndex = 0;
             // 
             // searchTypeComboBox
             // 
+            this.searchTypeComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.searchTypeComboBox.FormattingEnabled = true;
-            this.searchTypeComboBox.Location = new System.Drawing.Point(25, 3);
+            this.searchTypeComboBox.Location = new System.Drawing.Point(275, 3);
             this.searchTypeComboBox.Name = "searchTypeComboBox";
-            this.searchTypeComboBox.Size = new System.Drawing.Size(151, 28);
+            this.searchTypeComboBox.Size = new System.Drawing.Size(217, 28);
             this.searchTypeComboBox.TabIndex = 0;
             // 
             // fileNameTextBox
             // 
-            this.fileNameTextBox.Location = new System.Drawing.Point(25, 37);
+            this.fileNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileNameTextBox.Location = new System.Drawing.Point(275, 37);
             this.fileNameTextBox.Name = "fileNameTextBox";
-            this.fileNameTextBox.Size = new System.Drawing.Size(125, 27);
+            this.fileNameTextBox.Size = new System.Drawing.Size(217, 27);
             this.fileNameTextBox.TabIndex = 1;
             // 
-            // resetButton
+            // dateTimePicker
             // 
-            this.resetButton.Location = new System.Drawing.Point(25, 106);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(94, 14);
-            this.resetButton.TabIndex = 2;
-            this.resetButton.Text = "button1";
-            this.resetButton.UseVisualStyleBackColor = true;
+            this.dateTimePicker.Dock = System.Windows.Forms.DockStyle.Right;
+            this.dateTimePicker.Location = new System.Drawing.Point(26, 3);
+            this.dateTimePicker.Name = "dateTimePicker";
+            this.dateTimePicker.Size = new System.Drawing.Size(243, 27);
+            this.dateTimePicker.TabIndex = 0;
             // 
             // timeCheck
             // 
             this.timeCheck.AutoSize = true;
-            this.timeCheck.Location = new System.Drawing.Point(3, 71);
+            this.timeCheck.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.timeCheck.Location = new System.Drawing.Point(3, 3);
             this.timeCheck.Name = "timeCheck";
-            this.timeCheck.Size = new System.Drawing.Size(16, 24);
+            this.timeCheck.Size = new System.Drawing.Size(16, 28);
             this.timeCheck.TabIndex = 5;
             this.timeCheck.Text = "checkBox3";
             this.timeCheck.UseVisualStyleBackColor = true;
+            // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(25, 37);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(94, 28);
+            this.resetButton.TabIndex = 2;
+            this.resetButton.Text = "Reset";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // tableLayoutPanel6
             // 
@@ -389,13 +390,14 @@
             // 
             // leftButton
             // 
+            this.leftButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.leftButton.Location = new System.Drawing.Point(526, 3);
             this.leftButton.Name = "leftButton";
             this.leftButton.Size = new System.Drawing.Size(65, 27);
             this.leftButton.TabIndex = 5;
             this.leftButton.Text = "Search";
             this.leftButton.UseVisualStyleBackColor = true;
-            this.leftButton.Click += new System.EventHandler(this.leftButton_Click);
+            this.leftButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // tableLayoutPanel7
             // 
@@ -414,13 +416,14 @@
             // 
             // rightButton
             // 
+            this.rightButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightButton.Location = new System.Drawing.Point(533, 3);
             this.rightButton.Name = "rightButton";
-            this.rightButton.Size = new System.Drawing.Size(58, 23);
+            this.rightButton.Size = new System.Drawing.Size(58, 27);
             this.rightButton.TabIndex = 5;
             this.rightButton.Text = "Search";
             this.rightButton.UseVisualStyleBackColor = true;
-            this.rightButton.Click += new System.EventHandler(this.rightButton_Click);
+            this.rightButton.Click += new System.EventHandler(this.searchButton_Click);
             // 
             // rightTextBox
             // 
@@ -515,7 +518,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.DateTimePicker dateTimePicker;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.ComboBox searchTypeComboBox;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -528,6 +530,7 @@
         private System.Windows.Forms.TextBox rightTextBox;
         private System.Windows.Forms.Button resetButton;
         private System.Windows.Forms.CheckBox timeCheck;
+        private System.Windows.Forms.ComboBox searchTypeComboBox;
     }
 }
 

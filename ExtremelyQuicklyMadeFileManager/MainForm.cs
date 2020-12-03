@@ -19,130 +19,131 @@ namespace ExtremelyQuicklyMadeFileManager
         {
             InitializeComponent();
 
-            BrowsePanel leftPanel = new BrowsePanel(leftTree, leftListView, leftDirCombo, leftExtCombo);
-            BrowsePanel rightPanel = new BrowsePanel(rightTree, rightListView, rightDirCombo, rightExtCombo);
+            //Ініціалізуємо панелі файлового менеджера
+            BrowsePanel leftPanel = new BrowsePanel(leftTree, leftListView, leftDirCombo, leftExtCombo, leftTextBox, leftButton);
+            BrowsePanel rightPanel = new BrowsePanel(rightTree, rightListView, rightDirCombo, rightExtCombo, rightTextBox, rightButton);
 
             manager = new FileManager(leftPanel, rightPanel);
             manager.Init();
 
+            //Встановлюємо типи пошуку
             List<string> types = new List<string>() { "AllDirectories", "TopDirectoryOnly" };
             searchTypeComboBox.DataSource = types;
         }
 
-        private void leftDirCombo_SelectedIndexChanged(object sender, EventArgs e)
+        private void DirCombo_SelectedIndexChanged(object sender, EventArgs e)
+            //Обрано новий диск
         {
             leftTextBox.Text = leftDirCombo.SelectedItem.ToString();
-            manager.UpdateLeft();
+            manager.UpdateDirCombo(sender);
         }
 
-        private void leftTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void Tree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+            //Подвійний клік на папці
         {
             var node = e.Node;
-            leftTextBox.Text = node.Name;
-            manager.LeftPanelClicked(node);
+            manager.PanelClicked(node, sender);
         }
 
-        private void rightTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void searchButton_Click(object sender, EventArgs e)
+            //Пошук
         {
-            var node = e.Node;
-            rightTextBox.Text = node.Name;
-            manager.RightPanelClicked(node);
+            manager.Search(sender, fileNameTextBox, searchTypeComboBox, dateTimePicker, timeCheck);
         }
 
-        private void rightDirCombo_SelectedIndexChanged(object sender, EventArgs e)
+        private void Tree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+            //Клік на папці
         {
-            rightTextBox.Text = rightDirCombo.SelectedItem.ToString();
-            manager.UpdateRight();
+            manager.NodeClicked(sender, e.Node);
         }
 
-        private void rightTree_AfterSelect(object sender, TreeViewEventArgs e)
+        private void ListView_KeyDown(object sender, KeyEventArgs e)
+            //Обробка натискань клавіш на списку файлів
         {
-
-        }
-
-        private void leftListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void leftButton_Click(object sender, EventArgs e)
-        {
-            Searcher searcher = new Searcher(leftTextBox, searchTypeComboBox, leftExtCombo, fileNameTextBox, dateTimePicker, timeCheck);
-            manager.SetSearcher(searcher);
-            manager.Search(leftListView);
-        }
-
-        private void leftTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            leftTextBox.Text = e.Node.Name;
-            manager.LeftNodeClicked(e.Node);
-        }
-
-        private void rightButton_Click(object sender, EventArgs e)
-        {
-            Searcher searcher = new Searcher(rightTextBox, searchTypeComboBox, rightExtCombo, fileNameTextBox, dateTimePicker, timeCheck);
-            manager.SetSearcher(searcher);
-
-            manager.Search(rightListView);
-        }
-
-        private void rightTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            rightTextBox.Text = e.Node.Name;
-            //manager.RightNodeClicked(e.Node);
-        }
-
-        private void leftListView_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            for (int i = 0; i < leftListView.Items.Count; i++)
+            
+            if (sender is ListView)
             {
-                var rectangle = leftListView.GetItemRect(i);
-                if (rectangle.Contains(e.Location))
-                {
-                    TextEditorForm editorForm = new TextEditorForm(leftListView.Items[i].Name);
-                    editorForm.Show();
+                ListView view = sender as ListView;
 
-                    return;
+                switch(e.KeyCode)
+                {
+                    case Keys.F1:
+                        manager.CreateFile(sender, ".txt");
+                        break;
+                    case Keys.F3:
+                        if (view.SelectedItems.Count > 0)
+                        {
+                            foreach (ListViewItem i in view.SelectedItems)
+                            {
+                                TextEditorForm editorForm = new TextEditorForm(i.Name, manager);
+                                editorForm.Show();
+                                break;
+                            }
+                        }
+                        break;
+                    case Keys.Delete:
+                        var list = view.SelectedItems;
+                        var res = new List<string>();
+                        foreach (ListViewItem i in list)
+                        {
+                            res.Add(i.Name);
+                        }
+                        manager.DeleteFiles(res);
+                        break;
+                    case Keys.F2:
+                        foreach (ListViewItem i in view.SelectedItems)
+                        {
+                            manager.Copy(i.Name);
+                            break;
+                        }
+                        break;
+                    case Keys.F4:
+                        foreach (ListViewItem i in view.SelectedItems)
+                        {
+                            manager.CopyFileBuff = i.Name;
+                            break;
+                        }
+                        break;
                 }
             }
         }
 
-        private void leftListView_DoubleClick(object sender, EventArgs e)
+        private void Tree_KeyDown(object sender, KeyEventArgs e)
+            //Обробка натискань клавіш на дереві директорій
         {
-        }
-
-        private void leftListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void leftListView_ItemActivate(object sender, EventArgs e)
-        {
-        }
-
-        private void rightListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void rightListView_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            for (int i = 0; i < leftListView.Items.Count; i++)
+            if (sender is TreeView)
             {
-                var rectangle = leftListView.GetItemRect(i);
-                if (rectangle.Contains(e.Location))
-                {
-                    TextEditorForm editorForm = new TextEditorForm(leftListView.Items[i].Name);
-                    editorForm.Show();
+                TreeView view = sender as TreeView;
 
-                    return;
+                switch (e.KeyCode)
+                {
+                    case Keys.F1:
+                        if (view.SelectedNode != null)
+                        {
+                            manager.CreateFolder(view.SelectedNode.Name);
+                        }
+                        break;
+
+                    case Keys.Delete:
+                        manager.Delete(new List<string>() { view.SelectedNode.Name });
+                        break;
+
+                    case Keys.F2:
+                        manager.Copy(view.SelectedNode);
+                        break;
+
+                    case Keys.F4:
+                        manager.CopyDirBuff = view.SelectedNode.Name;
+                        break;
                 }
             }
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            timeCheck.Checked = false;
+            fileNameTextBox.Text = string.Empty;
+            searchTypeComboBox.SelectedIndex = 0;
         }
     }
 }

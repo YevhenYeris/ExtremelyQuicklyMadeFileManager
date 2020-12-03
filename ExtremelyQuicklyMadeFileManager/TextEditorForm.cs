@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using System.Linq;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,37 +11,54 @@ using System.Windows.Forms;
 
 namespace ExtremelyQuicklyMadeFileManager
 {
-    public partial class TextEditorForm : Form
+    partial class TextEditorForm : Form
     {
         string path;
 
-        public TextEditorForm(string path)
+        Editor editor;
+        FileManager manager;
+
+        public TextEditorForm(string path, FileManager manager)
         {
             InitializeComponent();
-            this.path = path;
 
-            FileStream fileOrig = File.OpenRead(path);
+            editor = new Editor(path, richTextBox, manager);
 
-            //fileOrig = fileOrig;
+            fileNameTextBox.Text = path;
 
-            richTextBox.Text = File.ReadAllText(path);
-
-            //fileOrig.Close();
-            fileOrig.Close();
+            saveToolStripMenuItem.Click += save_Click;
+            selectToolStripMenuItem.Click += select_Click;
+            toUpperToolStripMenuItem.Click += toUpper_Click;
+            replaceToolStripMenuItem.Click += replace_Click;
+            simplifyToolStripMenuItem.Click += simplify_Click;
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void save_Click(object sender, EventArgs e)
         {
-            File.WriteAllText(path, string.Empty);
-            FileStream fs = File.OpenWrite(path);
+            editor.Save(fileNameTextBox.Text);
+        }
 
-            
-            byte[] info = new UTF8Encoding(true).GetBytes(richTextBox.Text);
-            fs.Write(info, 0, info.Length);
+        private void select_Click(object sender, EventArgs e)
+        {
+            editor.Select();
+        }
 
-            fs.Close();
+        private void toUpper_Click(object sender, EventArgs e)
+        {
+            editor.ToUpper();
+        }
 
-            this.Close();
+        private void simplify_Click(object sender, EventArgs e)
+        {
+            editor.Simplify();
+        }
+
+        private void replace_Click(object sender, EventArgs e)
+        {
+            string replaceWhat = textBox1.Text;
+            string replaceWith = textBox2.Text;
+
+            editor.Replace(replaceWhat, replaceWith);
         }
     }
 }
